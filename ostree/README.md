@@ -71,17 +71,17 @@ Notes:
 The ostree-delta.py script can be used to create a field upgrade tarball. The upgrade can be between two repositories or between 2 shas within the same repository.
 
 ```
-> ./ostree-delta.py --repo repo --output output-dir [--update_repo repo] [--to_sha sha] [--from_sha sha] [--commit message] [--generate_bin]
+> ./ostree-delta.py --repo repo --output output-dir [--machine machine] [--update_repo repo] [--to_sha sha] [--from_sha sha] [--generate_bin]
 ```
 
    Where:
 
    - `--repo repo` is the absolute path to the base repo folder for upgrade.
    - `--output output-dir` is the absolute path to the output folder for upgrade artifacts.
-   - `[--update_repo repo]`  is the absolute path to the optional repo used if two seperated build trees are to be used.
-   - `[--to_sha]` optional text string specifying the base sha for the upgrade.
+   - `[--machine machine]` is the machine, and hence ref, to work on. Defaults to first found.
+   - `[--update_repo repo]` is the absolute path to the optional repo used if two seperated build trees are to be used.
+   - `[--to_sha]` optional text string specifying the result sha for the upgrade.
    - `[--from_sha]` optional text string specifying the base sha for the upgrade.
-   - `[--commit]` optional text string used when merging to seperate repositories. Only applicable if ```--update_repo``` is specified.
    - `[--generate_bin]` optional flag to force the data.tar.gz output to be renamed data.bin.
 
 Notes:
@@ -111,14 +111,15 @@ Notes:
 The ostree-delta.py script can be used to create a field upgrade tarball.
 
 ```
-> ./ostree-delta.py --repo repo --output output-dir --empty [--to_sha sha] [--generate_bin]
+> ./ostree-delta.py --repo repo --output output-dir --empty [--machine machine] [--to_sha sha] [--generate_bin]
 ```
 
    Where:
 
    - `--repo repo` is the absolute path to the base repo folder for upgrade.
    - `--output output-dir` is the absolute path to the output folder for upgrade artifacts.
-   - `[--to_sha]` optional text string specifying the base sha for the upgrade.
+   - `[--machine machine]` is the machine, and hence ref, to work on. Defaults to first found.
+   - `[--to_sha]` optional text string specifying the result sha for the upgrade.
    - `[--generate_bin]` optional flag to force the data.tar.gz output to be renamed data.bin.
 
 Notes:
@@ -136,7 +137,7 @@ docker run --rm -v base-repo:/base_repo -v ${PWD}:/ws -w /ws ${USER}/ostree-delt
 
    - `base-repo`  is the absolute path to the base repo folder for upgrade.
    - `output-dir` is the absolute path to the output folder for upgrade artifacts.
-   - `[--to_sha]` optional text string specifying the base sha for the upgrade.
+   - `[--to_sha]` optional text string specifying the result sha for the upgrade.
    - `[--generate_bin]` optional flag to force the data.tar.gz output to be renamed data.bin.
 
 Notes:
