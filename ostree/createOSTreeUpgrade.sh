@@ -18,6 +18,7 @@
 # TODO: add settings section to group all the hardcoded paths and values
 
 execdir="$(readlink -e "$(dirname "$0")")"
+main_part_num=0
 
 # Output a message if verbose mode is on
 blab() {
@@ -49,11 +50,10 @@ mount_wic_partition() {
     local wic_file="$1"
     local partition_number="$2"
     local mount_point="$3"
-    local partition_type="$4"
     local partition_info start_sector=0 sector_count=0
 
     [ -z "${wic_file}" ] && {
-        echo >&2 "Usage: mount_wic_partition <wic_file> [<partition_number> <mount_point> [partition_type]]"
+        echo >&2 "Usage: mount_wic_partition <wic_file> [<partition_number> <mount_point>]"
         return 2
     }
 
@@ -80,20 +80,10 @@ mount_wic_partition() {
 
     start_sector=$(echo "${partition_info}" | cut -d , -f 1 | cut -d = -f 2)
     sector_count=$(echo "${partition_info}" | cut -d , -f 2 | cut -d = -f 2)
-    [ -z "${partition_type}" ] && {
-        partition_type=$(echo "${partition_info}" | cut -d , -f 3 | cut -d = -f 2)
-        case "$partition_type" in
-            c) partition_type=vfat;;
-            83) partition_type=ext4;;
-            *) echo "Unsupported partition type: ${partition_type}"
-               echo "${partition_info}"
-               return 5
-        esac
-    }
 
     mkdir -p "${mount_point}"
     blab Mounting wic partition "$partition_number" of "$wic_file" to "$mount_point"
-    sudo mount -o loop,rw,offset=$((512*${start_sector})),sizelimit=$((512*${sector_count})) -t ${partition_type} "${wic_file}" "${mount_point}"
+    sudo mount -o loop,rw,offset=$((512*${start_sector})),sizelimit=$((512*${sector_count})) "${wic_file}" "${mount_point}"
 }
 
 # Convenience/symmetry function
@@ -134,6 +124,45 @@ ostree_diff_partition() {
     rm -rf "$workdir/old" "$workdir/new" "$workdir/diff"
 }
 
+# Find number of main partition to diff
+# Params: 
+#    1 - old image file name
+#    2 - new image file name
+#    3 - [optional] temporary directory for packing/unpacking files [default: TMPDIR, fallback current directory]
+# Assumptions: Main partition holds the ostree directory (while others don't)
+ostree_find_main_partition_number() {
+    local wic_old="$1"
+    local wic_new="$2"
+    local workdir="${3:-${TMPDIR:-$(pwd)}}"
+
+    blab "===> Finding main partition number"
+
+    main_part_num=1
+
+    while : ; do
+        blab "===> Trying partition $main_part_num"
+        mount_wic_partition "$wic_new" "$main_part_num" "$workdir/new" || 
+        {
+            echo >&2 "Unable to find main partition"
+            return 1
+        }
+        [ -d "$workdir/new/ostree" ] && break
+        umount_wic_partition "$workdir/new"
+        let main_part_num++
+    done
+
+    umount_wic_partition "$workdir/new"
+
+    mount_wic_partition "$wic_old" "$main_part_num" "$workdir/old" || return 1
+    [ -d "$workdir/old/ostree" ] || {
+        echo >&2 "old & new images have different partition schemes"
+        return 2
+    }
+    umount_wic_partition "$workdir/old"
+
+    rm -rf "$workdir/old" "$workdir/new"
+}
+
 # Setup temporary working space
 #
 setupTemp() {
@@ -165,7 +194,6 @@ main() {
     local oldwic="$1"
     local newwic="$2"
     local outputfile="$3"
-    local success=1
 
     [ -f "${oldwic}" ] && [ -f "${newwic}" ] && [ -n "${outputfile}" ] || {
         echo >&2 "Usage: sudo createOSTreeUpgrade.sh [--verbose] <old_wic_file> <new_wic_file> [upgrade_tag]"
@@ -192,6 +220,7 @@ main() {
     md5sum $oldwic | awk -v srch="$oldwic" -v repl="$newwic" '{ sub(srch,repl,$0); print $0 }' > ${TMPDIR}/chksum.txt
     md5sum -c ${TMPDIR}/chksum.txt 2>/dev/null | grep -q "OK" && {
         echo >&2 "Base image and result image are the same! Please make sure they are different."
+        cleanup
         return 4
     }
 
@@ -199,10 +228,16 @@ main() {
     gzcat -f "$oldwic" > ${TMPDIR}/old_wic
     gzcat -f "$newwic" > ${TMPDIR}/new_wic
 
-    ostree_diff_partition ${TMPDIR}/old_wic ${TMPDIR}/new_wic 2 || {
-            success=0
-            break
-        }
+    ostree_find_main_partition_number ${TMPDIR}/old_wic ${TMPDIR}/new_wic || {
+        echo >&2 "Unable to find main partition to diff."
+        cleanup
+        return 5
+    }
+
+    ostree_diff_partition ${TMPDIR}/old_wic ${TMPDIR}/new_wic $main_part_num || {
+        cleanup
+        return 6
+    }
 
     mv ${TMPDIR}/delta/data.tar.gz ${outputfile}
 
