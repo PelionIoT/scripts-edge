@@ -153,14 +153,14 @@ ostree_find_main_partition_number() {
 
     umount_wic_partition "$workdir/new"
 
-	[ ! empty ] && {
-    	mount_wic_partition "$wic_old" "$main_part_num" "$workdir/old" || return 1
-	    [ -d "$workdir/old/ostree" ] || {
-	        echo >&2 "old & new images have different partition schemes"
-	        return 2
-	    }
-	    umount_wic_partition "$workdir/old"
-	}
+    [ ! "$empty" ] && {
+        mount_wic_partition "$wic_old" "$main_part_num" "$workdir/old" || return 1
+        [ -d "$workdir/old/ostree" ] || {
+            echo >&2 "old & new images have different partition schemes"
+            return 2
+        }
+        umount_wic_partition "$workdir/old"
+    }
 
     rm -rf "$workdir/old" "$workdir/new"
 }
@@ -220,7 +220,7 @@ create_delta_between_wic_files() {
     gzcat -f "$oldwic" > "${TMPDIR}/old_wic"
     gzcat -f "$newwic" > "${TMPDIR}/new_wic"
 
-    ostree_find_main_partition_number ${TMPDIR}/old_wic ${TMPDIR}/new_wic || return 5
+    ostree_find_main_partition_number "${TMPDIR}/old_wic" "${TMPDIR}/new_wic" || return 5
 
     ostree_diff_partition "${TMPDIR}/old_wic" "${TMPDIR}/new_wic" $main_part_num
 
@@ -248,7 +248,7 @@ create_delta_from_scratch() {
     # If input wic files are gzipped, gunzip them otherwise copy them as is
     gzcat -f "$wicfile" > "${TMPDIR}/wicfile"
 
-    ostree_find_main_partition_number ${TMPDIR}/wicfile ${TMPDIR}/wicfile || return 1
+    ostree_find_main_partition_number "${TMPDIR}/wicfile" "${TMPDIR}/wicfile" || return 1
 
     blab "===> Diffing partition $partition"
 

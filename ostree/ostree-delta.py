@@ -90,7 +90,8 @@ def _determine_machine_from_repo(repo):
     # There should only be one ref remaining - the machine name. Anything else
     # is an error.
     if len(output) == 1:
-        machine = output[0]
+        # Extract the machine name, removing the distro part.
+        machine = output[0].split(":")[-1]
     else:
         print("Error:\tCould not determine the machine name from the repo")
         print("\tPossible values are:")
@@ -176,15 +177,13 @@ def _generate_tarball(outputpath):
     print(output)
 
 
-def _transfer_sha_between_repos(
-    source_repo, dest_repo, sha
-):
+def _transfer_sha_between_repos(source_repo, dest_repo, sha):
     """
-    Transfer a SHA from one repo to another
+    Transfer a SHA from one repo to another.
 
     Args:
     * source_repo (Path)
-    * dest_repo   (Path) 
+    * dest_repo   (Path)
     * sha,
 
     """
@@ -213,8 +212,9 @@ def _generate_static_delta_between_shas(
     * from_sha,   Optionally None to use --empty option
     """
     if from_sha is None:
-        # set the metadata from_sha to be the machine name. The deploy script on the device
-        # will sanity check that the machine is present in the device repo.
+        # set the metadata from_sha to be the machine name. The deploy script
+        # on the device will sanity check that the machine is present in the
+        # device repo.
         _generate_metadata(outputpath, machine, to_sha)
     else:
         _generate_metadata(outputpath, from_sha, to_sha)
@@ -235,14 +235,9 @@ def _generate_static_delta_between_shas(
         to_sha,
     ]
     if from_sha is None:
-        command += [
-            "--empty",
-        ]
+        command += ["--empty"]
     else:
-        command += [
-            "--from",
-            from_sha
-        ]
+        command += ["--from", from_sha]
 
     output = _execute_command(command)
     print(output)
@@ -383,8 +378,8 @@ def main():
     if args.empty:
         from_rev = None
     else:
-        # from_sha defaults to previous commit on machine's branch if single repo,
-        # else latest commit on machine's branch in original repo
+        # from_sha defaults to previous commit on machine's branch if single
+        # repo, else latest commit on machine's branch in original repo
         if args.from_sha is None:
             if repo == update_repo:
                 from_rev = machine + "^"
@@ -395,20 +390,12 @@ def main():
 
     to_sha = _rev_parse_in_repo(update_repo, to_rev)
     if to_sha is None:
-        warning(
-            "rev {} not found in {}".format(
-                to_rev, update_repo
-            )
-        )
+        warning("rev {} not found in {}".format(to_rev, update_repo))
         exit(1)
 
     from_sha = _rev_parse_in_repo(repo, from_rev)
     if from_sha is None and from_rev is not None:
-        warning(
-            "rev {} not found in {}".format(
-                from_rev, repo
-            )
-        )
+        warning("rev {} not found in {}".format(from_rev, repo))
         exit(1)
 
     if repo != update_repo:
