@@ -115,13 +115,16 @@ ostree_diff_partition() {
         return 2
     }
 
+    # Extract the original repo into a new area.
+    cp -R "$workdir/old/ostree/repo" "$workdir/repo"
+
     blab Running OSTree difftool
-    sudo "${execdir}/ostree-delta.py" --repo "$workdir/old/ostree/repo" --output "$workdir/delta" --update_repo "$workdir/new/ostree/repo"
+    sudo "${execdir}/ostree-delta.py" --repo "$workdir/repo" --output "$workdir/delta" --update_repo "$workdir/new/ostree/repo"
 
     umount_wic_partition "$workdir/old"
     umount_wic_partition "$workdir/new"
 
-    rm -rf "$workdir/old" "$workdir/new" "$workdir/diff"
+    rm -rf "$workdir/old" "$workdir/new" "$workdir/diff" "$workdir/repo"
 }
 
 # Find number of main partition to diff
