@@ -1,12 +1,13 @@
 # scripts-Pelion-Edge
 
-This repository contains various scripts that are useful with Pelion Edge offering.
+This repository contains scripts that are useful with the Pelion Edge offering.
 
-## Firmware Update Scripts
+## Firmware update scripts
 
-There are two script sets for doing [firmware updates](https://developer.pelion.com/docs/device-management-edge/latest/updating/index.html). One set for
-- [Linux microPlatform (LmP)](https://github.com/PelionIoT/scripts-pelion-edge/tree/master/ostree) based targets with OSTree based update mechanism, currently active offering.
-- [Plain Yocto based targets](https://github.com/PelionIoT/scripts-pelion-edge/tree/master/legacy-yocto), legacy offering.
+There are two script sets for [firmware updates](https://developer.pelion.com/docs/device-management-edge/latest/updating/index.html):
+
+- Scripts for the Pelion Edge active offering, targets based on [Linux microPlatform (LmP)](https://github.com/PelionIoT/scripts-pelion-edge/tree/master/ostree) with OSTree-based update mechanisms.
+- Scripts for the legacy offering, [plain Yocto-based targets](https://github.com/PelionIoT/scripts-pelion-edge/tree/master/legacy-yocto).
 
 Choose your script folder accordingly.
 
