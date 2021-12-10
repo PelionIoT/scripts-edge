@@ -1,0 +1,7 @@
+images:
+- file_name: rootfs.tar.gz
+  sub_comp_name: main
+  vendor_data: ostree-hash-placeholder
+- file_name: u-boot-caps.bin
+  sub_comp_name: boot
+  vendor_data: VER1.2
