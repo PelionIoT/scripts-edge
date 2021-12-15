@@ -30,7 +30,7 @@ require_binaries() {
     for b in "$@"; do
         type "$b" >/dev/null 2>&1 || {
             echo >&2 "Please make sure binary $b is installed and available in the path."
-	    let retval++
+            let retval++
         }
     done
     return $retval
@@ -91,7 +91,7 @@ mount_wic_partition() {
 
     mkdir -p "${mount_point}"
     blab Mounting wic partition "$partition_number" of "$wic_file" to "$mount_point"
-    mount -o loop,rw,offset=$((512*${start_sector})),sizelimit=$((512*${sector_count})) -t ${partition_type} "${wic_file}" "${mount_point}"
+    mount -o loop,rw,offset=$((512*start_sector)),sizelimit=$((512*sector_count)) -t ${partition_type} "${wic_file}" "${mount_point}"
 }
 
 # Convenience/symmetry function
@@ -128,9 +128,8 @@ cleanup() {
 main() {
     local wic="$1"
     local output="$2"
-    local success=1
 
-    [ -f "${wic}" ] && [ -n "${output}" ] || {
+    ([ -f "${wic}" ] && [ -n "${output}" ]) || {
         echo >&2 "Usage: sudo extractOSTreeRepo.sh [--verbose] <wic_file> <output>"
         echo >&2 "    wic_file        - .wic file containing the repo to extract"
         echo >&2 "    output          - name of extracted repo folder"
@@ -138,7 +137,7 @@ main() {
     }
 
     # Ensure we are running as root so we can mount the partition
-    [ $(id -u) -ne 0 ] && {
+    [ "$(id -u)" -ne 0 ] && {
         echo >&2 "Please run as root"
         return 3
     }
@@ -151,24 +150,24 @@ main() {
     setupTemp
 
     # If input wic files are gzipped, gunzip them otherwise copy them as is
-    gzcat -f "$wic" > ${TMPDIR}/wicfile
+    gzcat -f "$wic" > "${TMPDIR}/wicfile"
 
     mount_wic_partition "${TMPDIR}/wicfile" 2 "${TMPDIR}/wic" || {
         rm -rf "${TMPDIR}/wic"
         # Cleanup the temp working space
-        cleanup
+        cleanup "${TMPDIR}"
         return 2
     }
 
-    cp -R "${TMPDIR}/wic/ostree/repo"  $output
+    cp -R "${TMPDIR}/wic/ostree/repo"  "$output"
 
     umount_wic_partition "${TMPDIR}/wic"
 
     rm -rf "${TMPDIR}/wic"
 
     # Cleanup the temp working space
-    cleanup
+    cleanup "${TMPDIR}"
 }
 
-[ "$1" = "--verbose" ] && VERBOSE=1 && TARVFLAG=v && shift
+[ "$1" = "--verbose" ] && VERBOSE=1 && shift
 main "$@"

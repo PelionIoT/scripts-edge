@@ -36,8 +36,6 @@ username="user"
 LOCAL_UID=${LOCAL_UID:-9001}
 LOCAL_GID=${LOCAL_GID:-9001}
 
-printf "entrypoint: starting with UID=%d GID=%d\n" "$LOCAL_UID" "$LOCAL_GID"
-
 if groupadd -g "$LOCAL_GID" "$username"; then
    _=
 else

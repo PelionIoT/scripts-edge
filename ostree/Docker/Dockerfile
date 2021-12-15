@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM ubuntu:18.04
+FROM ubuntu:20.10
 
 RUN apt-get update && apt-get install locales \
     && dpkg-reconfigure locales \
@@ -25,6 +25,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 		python3-pip \
 		python3-pexpect \
         python3-setuptools
+
+RUN apt-get update && apt-get install -y \
+        fdisk
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
         sudo \
