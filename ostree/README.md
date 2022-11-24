@@ -1,6 +1,7 @@
 # OSTree-update-scripts
+
 Build scripts and tools for the OSTree firmware images.
-To create the images, ostree must either be installed on the system, or within a Docker container.
+To create the images, OSTree must either be installed on the system, or within a Docker container.
 There are three ways of creating an update image:
    - between two wic images.
    - between OSTree repositories.
@@ -20,11 +21,14 @@ or
 # Creating an update tarball between wic images
 
 ## Creating the first update
+
 The first update will be between the **first image** and the update image. 
+
 ## Creating subsequent updates
+
 Subsequent updates should be created between the **first image** and the new update image. We can only be sure that the base image is present in a device. We cannot rely on any previous update deltas being applied to a device.
 
-The createOSTreeUpgrade.sh script can be used to create a field upgrade tarball.
+The `createOSTreeUpgrade.sh` script can be used to create a field upgrade tarball.
 
 ```
 > sudo ./createOSTreeUpgrade.sh first-wic-file new-wic-file delta.bin
@@ -46,7 +50,7 @@ Notes:
 
 # Creating an update tarball from scratch with a single wic image
 
-The createOSTreeUpgrade.sh script can be used to create a field upgrade tarball.
+The `createOSTreeUpgrade.sh` script can be used to create a field upgrade tarball.
 
 ```
 > sudo ./createOSTreeUpgrade.sh --empty new-wic-file delta.bin
@@ -68,7 +72,7 @@ Notes:
 
 # Creating an update tarball between OSTree repositories
 
-The ostree-delta.py script can be used to create a field upgrade tarball. The upgrade can be between two repositories or between 2 shas within the same repository.
+The `ostree-delta.py` script can be used to create a field upgrade tarball. The upgrade can be between two repositories or between 2 shas within the same repository.
 
 ```
 > ./ostree-delta.py --repo repo --output output-dir [--machine machine] [--update_repo repo] [--to_sha sha] [--from_sha sha] [--generate_bin]
@@ -108,7 +112,7 @@ Notes:
 
 # Creating an update tarball from scratch within a single OSTree repository
 
-The ostree-delta.py script can be used to create a field upgrade tarball.
+The `ostree-delta.py` script can be used to create a field upgrade tarball.
 
 ```
 > ./ostree-delta.py --repo repo --output output-dir --empty [--machine machine] [--to_sha sha] [--generate_bin]
@@ -147,7 +151,7 @@ Notes:
 
 # Extracting the ostree repo from a wic image
 
-The extractOSTreeRepo.sh script can be used to extract the OSTree repository from a wic file.
+The `extractOSTreeRepo.sh` script can be used to extract the OSTree repository from a wic file.
 
 ```
 > sudo ./extractOSTreeRepo.sh wic-file repo_name 
@@ -157,4 +161,4 @@ Notes:
   1. **wic-file** is the absolute path to the .wic image produced by Yocto build. Either the .wic or the .wic.gz file can be used.
   1. The output is stored in the folder **repo_name** in the current folder
   1. extractOSTreeRepo mounts the partition from the wic file on a loopback device. 1 free loopback device is required.
-  1. The output folder will be owned by root.  Run ```sudo chown --changes --recursive $USER:$USER .``` to fix it.
+  1. The output folder will be owned by root.  Run `sudo chown --changes --recursive $USER:$USER .` to fix it.

@@ -1,6 +1,6 @@
 # Combined-update-scripts
 
-This repository contains helper scripts for combined update. Combined update lets you update multiple images on the device simultaneously (more details [here](https://developer.pelion.com/docs/device-management/current/connecting/implementing-combined-update.html)).
+This repository contains helper scripts for combined update. Combined update lets you update multiple images on the device simultaneously (more details [here](https://developer.izumanetworks.com/docs/device-management/current/connecting/implementing-combined-update.html)).
 
 ## Generating a combined update
 
