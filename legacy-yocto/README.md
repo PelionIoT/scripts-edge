@@ -1,5 +1,8 @@
-# scripts-pelion-edge
+# scripts-edge
+
 Build scripts and tools for the Izuma Edge firmware images
+
+NOTE! This repository has been renamed from `scripts-pelion-edge` to `scripts-edge`. Please update your `git remote` to match.
 
 # Creating an upgrade tarball
 

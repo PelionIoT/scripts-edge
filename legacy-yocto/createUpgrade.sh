@@ -250,7 +250,7 @@ main() {
     require_binaries gzip gzcat xz tar openssl md5sum grep rsync mount umount fdisk sfdisk || return 2
 
     [ -f upgrade-scripts/upgrade.sh ] || {
-        echo >&2 "Please run within a checkout of scripts-pelion-os-edge repo."
+        echo >&2 "Please run within a checkout of scripts-edge repo."
         echo >&2 "./upgrade-scripts/upgrade.sh needs to exist in the current directory"
         return 2
     }
