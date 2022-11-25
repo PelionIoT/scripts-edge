@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Copyright (c) 2021, Pelion Limited and affiliates.
+# Copyright (c) 2021-2022 Izuma Networks
 # SPDX-License-Identifier: Apache-2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
