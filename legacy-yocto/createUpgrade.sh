@@ -30,7 +30,7 @@ require_binaries() {
     for b in "$@"; do
         type "$b" >/dev/null 2>&1 || {
             echo >&2 "Please make sure binary $b is installed and available in the path."
-	    let retval++
+        let retval++
         }
     done
     return $retval
@@ -239,9 +239,9 @@ main() {
 
     [ -f "${oldwic}" ] && [ -f "${newwic}" ] || {
         echo >&2 "Usage: sudo createUpgrade.sh [--verbose] <old_wic_file> <new_wic_file> [upgrade_tag]"
-	echo >&2 "    old_wic_file        - base image for upgrade"
-	echo >&2 "    new_wic_file        - result image for upgrade"
-	echo >&2 "    upgrade_tag         - optional text string prepended to output tarball filename"
+    echo >&2 "    old_wic_file        - base image for upgrade"
+    echo >&2 "    new_wic_file        - result image for upgrade"
+    echo >&2 "    upgrade_tag         - optional text string prepended to output tarball filename"
         return 1
     }
 
