@@ -4,7 +4,7 @@ usage()
   echo "Usage: $0 [-t <target-name>] [-i <image-dir>] [-s <scripts-repo-dir>] [-f|-d <base-wic>] [-x exec-util-dir]" 1>&2
   echo "  -t target-name:      uz3cg-dgw, uz3eg-iocc-ebbr or uz3eg-iocc" 1>&2
   echo "  -i image-dir:        path to "images" directory in build area" 1>&2
-  echo "  -s scripts-repo-dir: path to scripts-pelion-edge repo" 1>&2
+  echo "  -s scripts-repo-dir: path to scripts-edge repo" 1>&2
   echo "  -f:                  full image" 1>&2
   echo "  -d base-wic:         delta image with path to base wic file (if no path, taken from <image-dir>/<target-name> directory)" 1>&2
   echo "  -x exec-util-dir:    path to executable utilities (mkimage & mkeficapsule)" 1>&2
@@ -16,8 +16,8 @@ usage()
   echo "- Valid package_config.yaml & u-boot-caps.its in the current directory" 1>&2
   echo 1>&2
   echo "Examples:" 1>&2
-  echo "$0 -t uz3cg-dgw -i ~/work/pelion_edge/build/build-lmp/deploy/images -s ~/work/scripts-pelion-edge -d base-console-image-lmp-uz3cg-dgw.wic.gz -x ./exe" 1>&2
-  echo "$0 -t uz3eg-iocc-ebbr -i ~/work/pelion_edge/build/build-lmp/deploy/images -s ~/work/scripts-pelion-edge -f -x ./exe" 1>&2
+  echo "$0 -t uz3cg-dgw -i ~/work/lmp_edge/build/build-lmp/deploy/images -s ~/work/scripts-edge -d base-console-image-lmp-uz3cg-dgw.wic.gz -x ./exe" 1>&2
+  echo "$0 -t uz3eg-iocc-ebbr -i ~/work/lmp_edge/build/build-lmp/deploy/images -s ~/work/scripts-edge -f -x ./exe" 1>&2
   exit 1
 }
 
