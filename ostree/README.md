@@ -83,7 +83,7 @@ The `ostree-delta.py` script can be used to create a field upgrade tarball. The 
    - `--repo repo` is the absolute path to the base repo folder for upgrade.
    - `--output output-dir` is the absolute path to the output folder for upgrade artifacts.
    - `[--machine machine]` is the machine, and hence ref, to work on. Defaults to first found.
-   - `[--update_repo repo]` is the absolute path to the optional repo used if two seperated build trees are to be used.
+   - `[--update_repo repo]` is the absolute path to the optional repo used if two separated build trees are to be used.
    - `[--to_sha]` optional text string specifying the result sha for the upgrade.
    - `[--from_sha]` optional text string specifying the base sha for the upgrade.
    - `[--generate_bin]` optional flag to force the data.tar.gz output to be renamed data.bin.
@@ -102,7 +102,7 @@ docker run --rm -v base-repo:/base_repo -v update-repo:/update_repo -v ${PWD}:/w
    Where:
 
    - `base-repo`  is the absolute path to the base repo folder for upgrade.
-   - `update-repo` is the absolute path to the repo if two seperated build trees are to be used.
+   - `update-repo` is the absolute path to the repo if two separated build trees are to be used.
    - `output-dir` is the absolute path to the output folder for upgrade artifacts.
 
 Notes:
