@@ -31,9 +31,9 @@ FORCEUPGRADETHEUPGRADE=0
 WIPETHEUSER_PARTITION=0
 #wipes the user database clean
 WIPETHEUSERDB=0
-#wipes the upgrade parititon (only use this in specail cases.  if we are upgrading the upgrade partition, it is automatically wiped)
+#wipes the upgrade parititon (only use this in special cases.  if we are upgrading the upgrade partition, it is automatically wiped)
 WIPETHEUPGRADE=0
-#wipes the factory parititon (only use this in specail cases.  if we are upgrading the factory partition, it is automatically wiped)
+#wipes the factory parititon (only use this in special cases.  if we are upgrading the factory partition, it is automatically wiped)
 WIPETHEFACTORY=0
 
 

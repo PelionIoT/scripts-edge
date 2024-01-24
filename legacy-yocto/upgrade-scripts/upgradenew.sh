@@ -25,7 +25,7 @@
 
 #These are the defaults that are set in the int script anways.  To overide them, you can set them to something different
 
-#wipes the factory partition (only use this in specail cases. 
+#wipes the factory partition (only use this in special cases. 
 # if we are upgrading the factory partition, it is automatically wiped),
 #  if you specify this, and nothing else, you will brick your relay.
 WIPETHEFACTORY=0
@@ -46,7 +46,7 @@ REPARTITIONEMMC=1
 #	FORCEUPGRADETHEFACTORY=0
 #	REPARTITIONEMMC=1
 #	Resut, The drive will be repartitioned (if and only if) the desired partition size does not match the 
-#	current partiion size, and only if the Upgrade is deemed necessary by having a newer factory avaiable than
+#	current partiion size, and only if the Upgrade is deemed necessary by having a newer factory available than
 #  	what is currnetly installed
 #Example:
 #	UPGRADETHEFACTORY=0
@@ -54,9 +54,9 @@ REPARTITIONEMMC=1
 #	REPARTITIONEMMC=1
 #	Resut, The drive will be repartitioned (if and only if) the desired partition size does not match the 
 #	current partiion size, A new factory image is forced installed even
-#wipes the upgrade partition (only use this in specail cases.  
+#wipes the upgrade partition (only use this in special cases.  
 #if we are upgrading the upgrade partition, it is automatically wiped)
-#if you specifiy this, and nothing else, you will brick your relay
+#if you specify this, and nothing else, you will brick your relay
 WIPETHEUPGRADE=0
 #upgrades the upgrade only if the upgrade differs in version number for the current upgrade partition
 #we alaways wipe the upgrade partition before installing.  never copy over. 
@@ -67,7 +67,7 @@ FORCEUPGRADETHEUPGRADE=0
 #Note we don't "automatically" wipe the user, userdata, or boot partitions as those parititons hold userdata"
 #if you want them wiped in the upgrade, you must call the following
 WIPETHEUSER_PARTITION=0
-#upgrades the user partition with user.tar.xz.  (an unforseen preventive condition)
+#upgrades the user partition with user.tar.xz.  (an unforeseen preventive condition)
 #strategy is copyover unless WIPETHEUSER_PARTITION is set.
 UPGRADETHEUSER_PARTITIONWHENNEWER=0
 #forces the upgrade of the user partition. 
@@ -76,7 +76,7 @@ FORCEUPGRADETHEUSER_PARTITION=0
 #Note we don't "automatically" wipe the user, userdata, or boot partitions as those parititons hold userdata"
 #if you want them wiped in the upgrade, you must call the following
 WIPETHEUSERDATA=0
-#upgrades the user partition with userdata.tar.xx.  (an unforseen preventive condition)
+#upgrades the user partition with userdata.tar.xx.  (an unforeseen preventive condition)
 #strategy is copyover unless WIPETHEUSERDATA is set.
 UPGRADETHEUSERDATAWHENNEWER=0
 #forces the upgrade of the user partition. 
@@ -85,7 +85,7 @@ FORCEUPGRADETHEUSERDATA=0
 #Note we don't "automatically" wipe the user, userdata, or boot partitions as those parititons hold userdata"
 #if you want them wiped in the upgrade, you must call the following
 WIPETHEBOOT=0
-#upgrades the user partition with boot.tar.xz.  (an unforseen preventive condition)
+#upgrades the user partition with boot.tar.xz.  (an unforeseen preventive condition)
 #strategy is copyover unless WIPETHEBOOT is set.
 UPGRADETHEBOOTWHENNEWER=1
 #upgrades the boot whenever there is a file different in the upgrade
@@ -95,7 +95,7 @@ UPGRADETHEBOOTWHENDIFFERENT=0
 #forces the upgrade of the user partition. 
 FORCEUPGRADETHEBOOT=0
 #wipes the u-boot section clean
-#Note we don't "automatically" wipe the u-boot.  This could be catestrophic unless you immedatly install a new-uboot
+#Note we don't "automatically" wipe the u-boot.  This could be catastrophic unless you immedatly install a new-uboot
 #Note we have tremendous success with just overwritting the uboot. so just do that usually
 WIPETHEU_BOOT=0
 #upgrades the uboot sector with the u-boot.bin located on the boot partitition
