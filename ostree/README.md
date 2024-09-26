@@ -30,57 +30,57 @@ Subsequent updates should be created between the **first image** and the new upd
 
 The `createOSTreeUpgrade.sh` script can be used to create a field upgrade tarball.
 
-```
-> sudo ./createOSTreeUpgrade.sh first-wic-file new-wic-file delta.bin
+```bash
+sudo ./createOSTreeUpgrade.sh first-wic-file new-wic-file delta.upd
 ```
 
 If using the Docker container use:
 
-```
+```bash
 docker build --no-cache -f Docker/Dockerfile --label ostree-delta  --tag ${USER}/ostree-delta:latest .
-docker run --rm -v first-wic-file:/first_wic -v new-wic-file:/new_wic -v /dev:/dev -v ${PWD}:/ws -w /ws --privileged ${USER}/ostree-delta:latest ./createOSTreeUpgrade.sh /first_wic /new_wic delta.bin
+docker run --rm -v first-wic-file:/first_wic -v new-wic-file:/new_wic -v /dev:/dev -v ${PWD}:/ws -w /ws --privileged ${USER}/ostree-delta:latest ./createOSTreeUpgrade.sh /first_wic /new_wic delta.upd
 ```
 
 Notes:
-  1. **first-wic-file** and **new-wic-file** are the absolute paths to the .wic images produced by Yocto build. Either the .wic or the .wic.gz file can be used.
-  1. The output is stored in the file **delta.bin** in the current folder
+  1. **first-wic-file** and **new-wic-file** are the absolute paths to the `.wic` images produced by Yocto build. Either the `.wic` or the `.wic.gz` file can be used.
+  1. The output is stored in the file `delta.upd` in the current folder
   1. createOSTreeUpgrade mounts the partitions from the wic files on loopback devices. 2 free loopback devices are required.
-  1. The ```--privileged``` flag is used in the ```docker run``` command to allow mounting of the loopback devices within the container.
+  1. The `--privileged` flag is used in the `docker run` command to allow mounting of the loopback devices within the container.
   1. If you have built with Docker the output files will be owned by root.  Run ```sudo chown --changes --recursive $USER:$USER .``` to fix it.
 
 # Creating an update tarball from scratch with a single wic image
 
 The `createOSTreeUpgrade.sh` script can be used to create a field upgrade tarball.
 
-```
-> sudo ./createOSTreeUpgrade.sh --empty new-wic-file delta.bin
+```bash
+sudo ./createOSTreeUpgrade.sh --empty new-wic-file delta.upd
 ```
 
 If using the Docker container use:
 
-```
+```bash
 docker build --no-cache -f Docker/Dockerfile --label ostree-delta  --tag ${USER}/ostree-delta:latest .
-docker run --rm -v new-wic-file:/new_wic -v /dev:/dev -v ${PWD}:/ws -w /ws --privileged ${USER}/ostree-delta:latest ./createOSTreeUpgrade.sh --empty /new_wic delta.bin
+docker run --rm -v new-wic-file:/new_wic -v /dev:/dev -v ${PWD}:/ws -w /ws --privileged ${USER}/ostree-delta:latest ./createOSTreeUpgrade.sh --empty /new_wic delta.upd
 ```
 
 Notes:
-  1. **new-wic-file** is the absolute path to the .wic image produced by Yocto build. Either the .wic or the .wic.gz file can be used.
-  1. The output is stored in the file **delta.bin** in the current folder
-  1. createOSTreeUpgrade mounts the partition from the wic file on a loopback device. 1 free loopback devices are required.
-  1. The ```--privileged``` flag is used in the ```docker run``` command to allow mounting of the loopback device within the container.
+  1. **new-wic-file** is the absolute path to the .wic image produced by Yocto build. Either the `.wic` or the `.wic.gz` file can be used.
+  1. The output is stored in the file `delta.upd` in the current folder
+  1. `createOSTreeUpgrade` mounts the partition from the `wic` file on a loopback device. 1 free loopback devices are required.
+  1. The `--privileged` flag is used in the `docker run` command to allow mounting of the loopback device within the container.
   1. If you have built with Docker the output files will be owned by root.  Run ```sudo chown --changes --recursive $USER:$USER .``` to fix it.
 
 # Creating an update tarball between OSTree repositories
 
-The `ostree-delta.py` script can be used to create a field upgrade tarball. The upgrade can be between two repositories or between 2 shas within the same repository.
+The `ostree-delta.py` script can be used to create a field upgrade tarball. The upgrade can be between two OSTree repositories or between 2 shas within the same repository.
 
-```
+```bash
 > ./ostree-delta.py --repo repo --output output-dir [--machine machine] [--update_repo repo] [--to_sha sha] [--from_sha sha] [--generate_bin]
 ```
 
    Where:
 
-   - `--repo repo` is the absolute path to the base repo folder for upgrade.
+   - `--repo repo` is the absolute path to the base OSTree repo folder for upgrade.
    - `--output output-dir` is the absolute path to the output folder for upgrade artifacts.
    - `[--machine machine]` is the machine, and hence ref, to work on. Defaults to first found.
    - `[--update_repo repo]` is the absolute path to the optional repo used if two separated build trees are to be used.
@@ -90,11 +90,11 @@ The `ostree-delta.py` script can be used to create a field upgrade tarball. The 
 
 Notes:
   1. The output is a gzipped tarball in the output-dir folder.
-  1. The output is named data.tar-gz. If the `--generate_bin` option is provided then the output is renamed to data.bin
+  1. The output is named `data.tar-gz`. If the `--generate_bin` option is provided then the output is renamed to `data.bin`.
 
 If using the Docker container use:
 
-```
+```bash
 docker build --no-cache -f Docker/Dockerfile --label ostree-delta  --tag ${USER}/ostree-delta:latest .
 docker run --rm -v base-repo:/base_repo -v update-repo:/update_repo -v ${PWD}:/ws -w /ws ${USER}/ostree-delta:latest ./ostree-delta.py --repo=/base_repo --update_repo /update_repo --output output-dir
 ```
@@ -107,15 +107,15 @@ docker run --rm -v base-repo:/base_repo -v update-repo:/update_repo -v ${PWD}:/w
 
 Notes:
   1. The output is a gzipped tarball in the output-dir folder.
-  1. output is named data.tar-gz.
+  1. Output is named `data.tar-gz`.
   1. The output files will be owned by root.  Run ```sudo chown --changes --recursive $USER:$USER .``` to fix it.
 
 # Creating an update tarball from scratch within a single OSTree repository
 
 The `ostree-delta.py` script can be used to create a field upgrade tarball.
 
-```
-> ./ostree-delta.py --repo repo --output output-dir --empty [--machine machine] [--to_sha sha] [--generate_bin]
+```bash
+./ostree-delta.py --repo repo --output output-dir --empty [--machine machine] [--to_sha sha] [--generate_bin]
 ```
 
    Where:
@@ -132,7 +132,7 @@ Notes:
 
 If using the Docker container use:
 
-```
+```bash
 docker build --no-cache -f Docker/Dockerfile --label ostree-delta  --tag ${USER}/ostree-delta:latest .
 docker run --rm -v base-repo:/base_repo -v ${PWD}:/ws -w /ws ${USER}/ostree-delta:latest ./ostree-delta.py --repo=/base_repo --empty --output output-dir
 ```
@@ -151,14 +151,14 @@ Notes:
 
 # Extracting the ostree repo from a wic image
 
-The `extractOSTreeRepo.sh` script can be used to extract the OSTree repository from a wic file.
+The `extractOSTreeRepo.sh` script can be used to extract the OSTree repository from a `wic` file.
 
 ```
-> sudo ./extractOSTreeRepo.sh wic-file repo_name 
+sudo ./extractOSTreeRepo.sh wic-file repo_name 
 ```
 
 Notes:
   1. **wic-file** is the absolute path to the .wic image produced by Yocto build. Either the .wic or the .wic.gz file can be used.
   1. The output is stored in the folder **repo_name** in the current folder
-  1. extractOSTreeRepo mounts the partition from the wic file on a loopback device. 1 free loopback device is required.
+  1. `extractOSTreeRepo` mounts the partition from the `wic` file on a loopback device. 1 free loopback device is required.
   1. The output folder will be owned by root.  Run `sudo chown --changes --recursive $USER:$USER .` to fix it.
