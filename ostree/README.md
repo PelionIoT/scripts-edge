@@ -75,13 +75,14 @@ Notes:
 The `ostree-delta.py` script can be used to create a field upgrade tarball. The upgrade can be between two OSTree repositories or between 2 shas within the same repository.
 
 ```bash
-> ./ostree-delta.py --repo repo --output output-dir [--machine machine] [--update_repo repo] [--to_sha sha] [--from_sha sha] [--generate_bin]
+./ostree-delta.py --repo repo --output output-dir [--machine machine] [--update_repo repo] [--to_sha sha] [--from_sha sha] [--generate_bin]
 ```
 
    Where:
 
    - `--repo repo` is the absolute path to the base OSTree repo folder for upgrade.
    - `--output output-dir` is the absolute path to the output folder for upgrade artifacts.
+   - **NOTE! The output-dir must be an empty directory!**
    - `[--machine machine]` is the machine, and hence ref, to work on. Defaults to first found.
    - `[--update_repo repo]` is the absolute path to the optional repo used if two separated build trees are to be used.
    - `[--to_sha]` optional text string specifying the result sha for the upgrade.
